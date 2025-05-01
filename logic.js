@@ -53,6 +53,7 @@ increaseOrderButton.addEventListener("click", () => {
 });
 
 calculateButton.addEventListener("click", () => {
+    cleanMessages();
     let listaNumeros = [];
     let inputList = document.querySelectorAll('section.container > div.numero > input');
     inputList.forEach((x) => listaNumeros.push(x.value));
@@ -60,53 +61,74 @@ calculateButton.addEventListener("click", () => {
     listaNumeros = listaNumeros.map((x) => x = parseInt(x, 10)); // intentar con foreach
     const constanteMagica = orden * (orden ** 2 + 1) / 2;
 
-    //magicSquareCheck(listaNumeros, orden);
-    //semiMagicSquareCheck(listaNumeros, orden, constanteMagica);
-    //pandiagonalSquareCheck(listaNumeros, orden, constanteMagica);
-    //heteroMagicSquareCheck(listaNumeros, orden);
-    //antiMagicSquareCheck(listaNumeros, orden);
-    //associativeSquareCheck(listaNumeros, orden);
-    //compactMagicSquareCheck(listaNumeros, orden, constanteMagica)
-    completeMagicSquareCheck(listaNumeros, orden, constanteMagica)
-    //isPrimeNumbers(listaNumeros);
+    let isNOrderMagicSquare = nOrderMagicSquareCheck(listaNumeros, orden, constanteMagica);
+    semiMagicSquareCheck(listaNumeros, orden, constanteMagica);
+    isPandiagonal = pandiagonalSquareCheck(listaNumeros, orden, constanteMagica, isNOrderMagicSquare);;
+    antiMagicSquaresCheck(listaNumeros, orden);
+    primeSquareCheck(listaNumeros, orden, constanteMagica);
+    isAssociative = associativeSquareCheck(listaNumeros, orden);
+    isCompactSquare = compactMagicSquareCheck(listaNumeros, orden, constanteMagica);
+    isCompleteSquare = completeMagicSquareCheck(listaNumeros, orden, constanteMagica);
+    supermagicSquareCheck(isCompactSquare, isCompleteSquare);
+    ultramagicSquareCheck(isPandiagonal, isAssociative);
 
 })
 
-/*
-    p = document.createElement("p");
-    p.innerHTML = "Mágico";
-    document.body.appendChild(p);
-*/
+function supermagicSquareCheck(isCompactSquare, isCompleteSquare){
+    if (!isCompactSquare) {
+        sendMessage("No es un cuadrado compacto, por lo que no es un cuadrado supermágico");
+        return false;
+    }
 
-function magicSquareCheck(listaNumeros, orden) {
-    constanteMagica = obtainMagicConstant(listaNumeros, orden);
-    console.log(constanteMagica.toString());
+    if (!isCompleteSquare) {
+        sendMessage("No es un cuadrado completo, por lo que no es un cuadrado supermágico");
+        return false;
+    }
 
-    if (!rowsCheck(listaNumeros, orden, constanteMagica)) { return };
-    if (!columnsCheck(listaNumeros, orden, constanteMagica)) { return };
-    if (!diagonalsCheck(listaNumeros, orden, constanteMagica)) { return };
+    sendMessage("Es un cuadrado supermágico de orden " + orden.toString());
+}
 
-    document.getElementById("normal").innerHTML = "SI";
+function ultramagicSquareCheck(isPandiagonal, isAssociative){
+    if (!isPandiagonal) {
+        sendMessage("No es un cuadrado pandiagonal, por lo que no es un cuadrado ultramágico");
+        return false;
+    }
+
+    if (!isAssociative) {
+        sendMessage("No es un cuadrado asociativo, por lo que no es un cuadrado ultramágico");
+        return false;
+    }
+
+    sendMessage("Es un cuadrado supermágico de orden " + orden.toString());
+}
+
+function nOrderMagicSquareCheck(listaNumeros, orden, constanteMagica) {
+    if (!rowsCheck(listaNumeros, orden, constanteMagica)) { return false};
+    if (!columnsCheck(listaNumeros, orden, constanteMagica)) { return false};
+    if (!diagonalsCheck(listaNumeros, orden, constanteMagica)) { return false};
+
+    sendMessage("Es un cuadrado mágico normal de orden " + orden.toString());
+    return true;
 }
 
 function semiMagicSquareCheck(listaNumeros, orden, constanteMagica) {
     if (!rowsCheck(listaNumeros, orden, constanteMagica)) { return };
     if (!columnsCheck(listaNumeros, orden, constanteMagica)) { return };
 
-    document.getElementById("semimagico").innerHTML = "SI";
+    sendMessage("Es un cuadrado semimágico de orden " + orden.toString())
 }
 
-function pandiagonalSquareCheck(listaNumeros, orden, constanteMagica) {
-    if (!brokenDiagonalsCheck(listaNumeros, orden, constanteMagica)) { return };
-    if (!rowsCheck(listaNumeros, orden, constanteMagica)) { return };
-    if (!columnsCheck(listaNumeros, orden, constanteMagica)) { return };
-    if (!diagonalsCheck(listaNumeros, orden, constanteMagica)) { return };
+function pandiagonalSquareCheck(listaNumeros, orden, constanteMagica, isNOrderMagicSquare) {
+    if (!brokenDiagonalsCheck(listaNumeros, orden, constanteMagica)) { return false};
+    if (!isNOrderMagicSquare) {
+        sendMessage("No es un cuadrado mágico normal, por lo que no es panmágico")
+        return false
+    };
 
-
-    document.getElementById("pandiagonal").innerHTML = "SI";
+    sendMessage("Es un cuadrado panmágico de orden " + orden.toString())
 }
 
-function heteroMagicSquareCheck(listaNumeros, orden) {
+/* function heteroMagicSquareCheck(listaNumeros, orden) {
     sumsRows = getSumInRows(listaNumeros, orden);
     sumsColumns = getSumInColumns(listaNumeros, orden);
     sumDiagonals = getSumInDiagonals(listaNumeros, orden);
@@ -115,14 +137,15 @@ function heteroMagicSquareCheck(listaNumeros, orden) {
     sumsSet = new Set(sums);
 
     if (sums.length != sumsSet.size) {
-        document.getElementById("heterocuadrado").innerHTML = "NO";
+        sendMessage("Existen 2 sumas de filas/columnas/diagonales iguales, por lo que no es heterocuadrado ni un cuadrado antimágico");
         return false;
     }
 
-    document.getElementById("heterocuadrado").innerHTML = "SI";
-}
+    sendMessage("Es un heterocuadrado de orden " + orden.toString());
+    return true;
+} */
 
-function antiMagicSquareCheck(listaNumeros, orden) {
+function antiMagicSquaresCheck(listaNumeros, orden) {
     sumsRows = getSumInRows(listaNumeros, orden);
     sumsColumns = getSumInColumns(listaNumeros, orden);
     sumDiagonals = getSumInDiagonals(listaNumeros, orden);
@@ -132,16 +155,18 @@ function antiMagicSquareCheck(listaNumeros, orden) {
     sumsSet = new Set(sums);
 
     if (sums.length != sumsSet.size) {
-        document.getElementById("antimagico").innerHTML = "NO";
+        sendMessage("Existen 2 sumas de filas/columnas/diagonales iguales, por lo que no es heterocuadrado ni un cuadrado antimágico");
         return false;
     }
+
+    sendMessage("Es un heterocuadrado de orden " + orden.toString());
 
     if (sums[sums.length - 1] - sums[0] != orden * 2 + 1) {
-        document.getElementById("antimagico").innerHTML = "NO";
+        sendMessage("No existe una sucesion con las sumas, por lo que el cuadrado no es antimágico");
         return false;
     }
 
-    document.getElementById("antimagico").innerHTML = "SI";
+    sendMessage("Es un cuadrado antimágico de orden " + orden.toString());
     return true;
 }
 
@@ -166,13 +191,30 @@ function isPrimeNumber(number) {
     return true;
 }
 
-function primeSquareCheck(listaNumeros, orden, constanteMagica) {
-    if (!rowsCheck(listaNumeros, orden, constanteMagica)) { return };
-    if (!columnsCheck(listaNumeros, orden, constanteMagica)) { return };
-    if (!diagonalsCheck(listaNumeros, orden, constanteMagica)) { return };
-    if (!isPrimeNumbers(listaNumeros)) { return };
+function primeSquareCheck(listaNumeros, orden) {
+    constanteMagica=obtainMagicConstant(listaNumeros,orden);
 
-    document.getElementById("primo").innerHTML = "SI";
+    if (!isPrimeNumbers(listaNumeros)) {
+        sendMessage("Los números no son primos, por lo que no es un cuadrado primo");
+        return false
+    };
+
+    if (!rowsCheck(listaNumeros, orden, constanteMagica)) {
+        sendMessage("Falla en una fila, por lo que no es cuadrado mágico");
+        return false
+    };
+
+    if (!columnsCheck(listaNumeros, orden, constanteMagica)) {
+        sendMessage("Falla en una columna, por lo que no es cuadrado mágico");
+        return false
+    };
+
+    if (!diagonalsCheck(listaNumeros, orden, constanteMagica)) {
+        sendMessage("Falla en una diagonal, por lo que no es cuadrado mágico");
+        return false
+    };
+
+    sendMessage("Es un cuadrado primo de orden " + orden.toString());
 }
 
 function associativeSquareCheck(listaNumeros, orden) {
@@ -180,18 +222,19 @@ function associativeSquareCheck(listaNumeros, orden) {
         let sum = listaNumeros[i] + listaNumeros[listaNumeros.length - i - 1];
 
         if (sum != orden ** 2 + 1) {
-            document.getElementById("asociativo").innerHTML = "NO es asociativo, la suma sale " + sum.toString();
+            casilla=i+1
+            sendMessage("La suma en la casilla "+ casilla.toString() +" sale " + sum.toString() + " por lo que el cuadrado no es asociativo");
             return false;
         }
 
     }
 
-    document.getElementById("asociativo").innerHTML = "SI";
+    sendMessage("Es cuadrado asociativo de orden " + orden.toString())
     return true;
 }
 function compactMagicSquareCheck(listaNumeros, orden, constanteMagica) {
     if (orden % 4 != 0) {
-        document.getElementById("asociativo").innerHTML = "El orden debe ser 4K, K numero entero";
+        sendMessage("El orden debe ser 4K, K numero entero, por lo que no es un cuadrado compacto");
         return false;
     }
     const k = orden / 4;
@@ -207,7 +250,8 @@ function compactMagicSquareCheck(listaNumeros, orden, constanteMagica) {
             totalSum += listaNumeros[casilla + orden + 1];
 
             if (totalSum != constanteMagica / k) {
-                document.getElementById("compacto").innerHTML = "NO, casilla 2x2 j= " + casilla.toString();
+                casilla=casilla+1
+                sendMessage("Falla en la casilla 2x2 j= " + casilla.toString() + ", por lo que no es un cuadrado compacto");
                 return false;
             }
         }
@@ -222,7 +266,8 @@ function compactMagicSquareCheck(listaNumeros, orden, constanteMagica) {
         totalSum += listaNumeros[casilla + listaNumeros.length - orden + 1];
 
         if (totalSum != constanteMagica / k) {
-            document.getElementById("compacto").innerHTML = "NO, casilla frontera fila 2x2 j= " + casilla.toString();
+            casilla=casilla+1
+            sendMessage("Falla en la casilla frontera fila 2x2 j= " + casilla.toString()+ ", por lo que no es un cuadrado compacto");
             return false;
         }
     }
@@ -236,53 +281,54 @@ function compactMagicSquareCheck(listaNumeros, orden, constanteMagica) {
         totalSum += listaNumeros[casilla + 2 * orden - 1];
 
         if (totalSum != constanteMagica / k) {
-            document.getElementById("compacto").innerHTML = "NO, casilla frontera fila 2x2 j= " + casilla.toString();
+            casilla=casilla+1
+            sendMessage("Falla en la casilla columna fila 2x2 j= " + casilla.toString() + ", por lo que no es un cuadrado compacto");
             return false;
         }
     }
 
 
-    document.getElementById("compacto").innerHTML = "SI";
+    sendMessage("Es un cuadrado compacto de orden " + orden.toString());
     return true;
 }
 
 
 function completeMagicSquareCheck(listaNumeros, orden, constanteMagica) {
     if (orden % 2 != 0) {
-        document.getElementById("completo").innerHTML = "El orden debe ser 2K";
+        sendMessage("El orden debe ser 2K, K un numero entero, por lo que no es un cuadrado completo")
         return false;
     }
     k = orden / 2;
 
 
-    for (let i = 0; i < orden/2; i++) {
-        for (let j = 0; j < orden/2; j++) {
+    for (let i = 0; i < orden / 2; i++) {
+        for (let j = 0; j < orden / 2; j++) {
             totalSum = 0;
-            casilla = j+i*orden;
-            totalSum+=listaNumeros[casilla];
-            totalSum+=listaNumeros[casilla + orden**2/2 + orden/2];
+            casilla = j + i * orden;
+            totalSum += listaNumeros[casilla];
+            totalSum += listaNumeros[casilla + orden ** 2 / 2 + orden / 2];
 
             if (totalSum != constanteMagica / k) {
-                document.getElementById("completo").innerHTML = "NO, casilla = " + casilla.toString();
+                sendMessage("Falla en la casilla " + casilla.toString()+ ", por lo que no es un cuadrado completo")
                 return false;
             }
         }
 
-        for (let j = orden/2; j < orden; j++) {
+        for (let j = orden / 2; j < orden; j++) {
             totalSum = 0;
-            casilla = j+i*orden;
-            totalSum+=listaNumeros[casilla];
-            totalSum+=listaNumeros[casilla + orden**2/2 - orden/2];
+            casilla = j + i * orden;
+            totalSum += listaNumeros[casilla];
+            totalSum += listaNumeros[casilla + orden ** 2 / 2 - orden / 2];
 
             if (totalSum != constanteMagica / k) {
-                document.getElementById("completo").innerHTML = "NO, casilla = " + casilla.toString();
+                sendMessage("Falla en la casilla " + casilla.toString()+ ", por lo que no es un cuadrado completo")
                 return false;
             }
         }
 
     }
 
-    document.getElementById("completo").innerHTML = "SI";
+    sendMessage("Es un cuadrado completo de orden " + orden.toString());
     return true;
 }
 
@@ -296,15 +342,24 @@ function obtainMagicConstant(listaNumeros, orden) {
     return totalSum
 }
 
+function sendMessage(texto) {
+    li = document.createElement("li");
+    li.innerHTML = texto;
+    document.getElementById("propiedades").appendChild(li);
+}
+
+function cleanMessages() {
+    document.getElementById("propiedades").textContent = '';
+}
+
 function rowsCheck(listaNumeros, orden, constanteMagica) {
     // Path check: Right -> Down
     const sumsRows = getSumInRows(listaNumeros, orden)
 
     for (let i = 0; i < sumsRows.length; i++) {
         if (sumsRows[i] != constanteMagica) {
-            console.log(sumsRows[i]);
-            console.log(constanteMagica);
-            document.getElementById("normal").innerHTML = "NO en fila";
+            fila=i+1;
+            sendMessage("Falla en la " + fila.toString() +"º fila, por lo que no es un cuadrado mágico/semimágico");
             return false;
         }
     }
@@ -331,9 +386,8 @@ function columnsCheck(listaNumeros, orden, constanteMagica) {
 
     for (let i = 0; i < sumsColumns.length; i++) {
         if (sumsColumns[i] != constanteMagica) {
-            console.log(sumsRows[i]);
-            console.log(constanteMagica);
-            document.getElementById("normal").innerHTML = "NO en columna";
+            columna=i+1;
+            sendMessage("Falla en la " + columna.toString() +"º columna, por lo que no es un cuadrado mágico/semimágico");
             return false;
         }
     }
@@ -358,14 +412,17 @@ function getSumInColumns(listaNumeros, orden) {
 function diagonalsCheck(listaNumeros, orden, constanteMagica) {
     const sumsDiagonals = getSumInDiagonals(listaNumeros, orden)
 
-    for (let i = 0; i < sumsDiagonals.length; i++) {
-        if (sumsDiagonals[i] != constanteMagica) {
-            console.log(sumsDiagonals[i]);
-            console.log(constanteMagica);
-            document.getElementById("normal").innerHTML = "NO en diagonal";
-            return false;
-        }
+
+    if (sumsDiagonals[0] != constanteMagica) {
+        sendMessage("Falla en la diagonal principal, por lo que no es un cuadrado mágico normal")
+        return false;
     }
+
+    if (sumsDiagonals[1] != constanteMagica) {
+        sendMessage("Falla en la diagonal secundaria, por lo que no es un cuadrado mágico normal")
+        return false;
+    }
+
 
     return true
 }
@@ -399,7 +456,6 @@ function brokenDiagonalsCheck(listaNumeros, orden, constanteMagica) {
 
     for (let i = 0; i < orden - 1; i++) {
         let totalSum = 0;
-        let con;
         for (let j = 0; j < i + 1; j++) {
             totalSum += listaNumeros[i + j * sj];
         }
@@ -408,16 +464,12 @@ function brokenDiagonalsCheck(listaNumeros, orden, constanteMagica) {
             totalSum += listaNumeros[i + i * sj + bj + j * sj];
         }
 
-        //console.log("suma: " + totalSum.toString())
-        //console.log("constante magica=" + constanteMagica.toString())
         if (totalSum != constanteMagica) {
-            document.getElementById("pandiagonal").innerHTML = "NO en la diagonal quebrada " + i.toString();
+            diagonal=i+1;
+            sendMessage("Falla en la "+ diagonal.toString() +"º diagonal quebrada, por lo que no es un cuadrado panmágico");
             return false;
         }
     }
 
-
+    return true;
 }
-
-
-
