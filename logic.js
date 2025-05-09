@@ -99,7 +99,7 @@ function ultramagicSquareCheck(isPandiagonal, isAssociative){
         return false;
     }
 
-    sendMessage("Es un cuadrado supermágico de orden " + orden.toString());
+    sendMessage("Es un cuadrado ultramágico de orden " + orden.toString());
 }
 
 function nOrderMagicSquareCheck(listaNumeros, orden, constanteMagica) {
