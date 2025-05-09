@@ -1,12 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+
+body {
+    font-family: "Onest", sans-serif;
+    background-color: #ddd;
+    font-size: 20px;
+
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+#button-container {
+    font-size: 0px;
+}
+
 .container {
     background-color: rgb(138, 228, 238);
-    border: 3px solid black;
-    border-color: #000;
+    border: 1px solid black;
+    
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     width: 30vw;
     height: 30vh;
+    margin-top: 1vh;
     margin-bottom: 1vh;
 }
 
@@ -18,14 +34,23 @@
 
     justify-content: center;
     background-color: rgb(119, 197, 124);
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 2px;
 }
 
-button {
-    width: 10vw;
-    height: 5vh;
+input{
+    font-family: inherit;
 }
+
+button {
+    font-family: inherit;
+    width: 10vw;
+    height: 7vh;
+    margin-right: 1px;
+    
+}
+
+
 
 input {
     background-color: rgb(119, 197, 124);
@@ -36,12 +61,12 @@ input {
     text-align: center;
 }
 
+.wrapper {
+    margin-left: 5vw;
+}
 
-
-
-
-body {
-    background-color: #ddd;
-    font-size: 20px;
+h1{
+    
+    font-weight: normal;
 }
 

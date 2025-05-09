@@ -65,7 +65,7 @@ calculateButton.addEventListener("click", () => {
     semiMagicSquareCheck(listaNumeros, orden, constanteMagica);
     isPandiagonal = pandiagonalSquareCheck(listaNumeros, orden, constanteMagica, isNOrderMagicSquare);;
     antiMagicSquaresCheck(listaNumeros, orden);
-    primeSquareCheck(listaNumeros, orden, constanteMagica);
+    primeSquareCheck(listaNumeros, orden);
     isAssociative = associativeSquareCheck(listaNumeros, orden);
     isCompactSquare = compactMagicSquareCheck(listaNumeros, orden, constanteMagica);
     isCompleteSquare = completeMagicSquareCheck(listaNumeros, orden, constanteMagica);
@@ -170,20 +170,14 @@ function antiMagicSquaresCheck(listaNumeros, orden) {
     return true;
 }
 
-function isPrimeNumbers(listaNumeros) {
-    listaNumeros.forEach((x) => {
-        if (!isPrimeNumber(x)) {
-            return false;
-        }
-    });
-    return true;
-}
+function isPrimeNumbers(listaNumeros) {return listaNumeros.every(isPrimeNumber)}
 
 function isPrimeNumber(number) {
     if (number <= 1) { return false; }
 
     for (let i = 2; i <= number / 2; i++) {
         if (number % i == 0) {
+            console.log("entra")
             return false;
         }
     }
