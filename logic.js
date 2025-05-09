@@ -90,7 +90,7 @@ function supermagicSquareCheck(isCompactSquare, isCompleteSquare){
 
 function ultramagicSquareCheck(isPandiagonal, isAssociative){
     if (!isPandiagonal) {
-        sendMessage("No es un cuadrado pandiagonal, por lo que no es un cuadrado ultramágico");
+        sendMessage("No es un cuadrado panmágico, por lo que no es un cuadrado ultramágico");
         return false;
     }
 
@@ -126,24 +126,9 @@ function pandiagonalSquareCheck(listaNumeros, orden, constanteMagica, isNOrderMa
     };
 
     sendMessage("Es un cuadrado panmágico de orden " + orden.toString())
-}
 
-/* function heteroMagicSquareCheck(listaNumeros, orden) {
-    sumsRows = getSumInRows(listaNumeros, orden);
-    sumsColumns = getSumInColumns(listaNumeros, orden);
-    sumDiagonals = getSumInDiagonals(listaNumeros, orden);
-
-    sums = sumsRows.concat(sumsColumns, sumDiagonals);
-    sumsSet = new Set(sums);
-
-    if (sums.length != sumsSet.size) {
-        sendMessage("Existen 2 sumas de filas/columnas/diagonales iguales, por lo que no es heterocuadrado ni un cuadrado antimágico");
-        return false;
-    }
-
-    sendMessage("Es un heterocuadrado de orden " + orden.toString());
     return true;
-} */
+}
 
 function antiMagicSquaresCheck(listaNumeros, orden) {
     sumsRows = getSumInRows(listaNumeros, orden);
@@ -226,6 +211,7 @@ function associativeSquareCheck(listaNumeros, orden) {
     sendMessage("Es cuadrado asociativo de orden " + orden.toString())
     return true;
 }
+
 function compactMagicSquareCheck(listaNumeros, orden, constanteMagica) {
     if (orden % 4 != 0) {
         sendMessage("El orden debe ser 4K, K numero entero, por lo que no es un cuadrado compacto");
